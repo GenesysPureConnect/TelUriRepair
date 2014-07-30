@@ -1,4 +1,0 @@
-C:\Program Files (x86)\Interactive Intelligence\ICUserApps\AddIns\TelUriRepair.dll
-C:\Program Files (x86)\Interactive Intelligence\ICUserApps\AddIns\TelUriRepair.pdb
-E:\GitHub\CalltoLyncHandler\obj\Debug\TelUriRepair.dll
-E:\GitHub\CalltoLyncHandler\obj\Debug\TelUriRepair.pdb

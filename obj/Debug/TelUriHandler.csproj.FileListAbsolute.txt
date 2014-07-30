@@ -1,5 +1,0 @@
-C:\Program Files (x86)\Interactive Intelligence\ICUserApps\AddIns\TelUriHandler.dll
-C:\Program Files (x86)\Interactive Intelligence\ICUserApps\AddIns\TelUriHandler.pdb
-E:\GitHub\CalltoLyncHandler\obj\Debug\TelUriHandler.csprojResolveAssemblyReference.cache
-E:\GitHub\CalltoLyncHandler\obj\Debug\TelUriHandler.dll
-E:\GitHub\CalltoLyncHandler\obj\Debug\TelUriHandler.pdb
