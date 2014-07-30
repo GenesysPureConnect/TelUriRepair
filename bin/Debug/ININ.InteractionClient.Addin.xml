@@ -1,0 +1,1431 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ININ.InteractionClient.AddIn</name>
+    </assembly>
+    <members>
+        <member name="T:ININ.InteractionClient.AddIn.AddInVersionAttribute">
+            <summary>
+            An assembly-level attribute to indicate what version of the
+            Interaction Client AddIn interface an AddIn was compiled against.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.AddInVersionAttribute.#ctor(System.Version)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.AddInVersionAttribute"/> class.
+            </summary>
+            <param name="version">
+            The version of the Interaction Client AddIn interface
+            this AddIn was compiled against.
+            </param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.AddInVersionAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.AddInVersionAttribute"/> class.
+            </summary>
+            <param name="version">The version.</param>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInVersionAttribute.Version">
+            <summary>
+            The version of the Interaction Client AddIn interface
+            this AddIn was compiled against.
+            </summary>
+            <remarks>
+            The Interaction Client will only load AddIns that have an 
+            <see cref="T:ININ.InteractionClient.AddIn.AddInVersionAttribute"/> with a version that matches
+            the <see cref="T:ININ.InteractionClient.AddIn.AddInVersionAttribute"/> on the ININ.InteractionClient.AddIn.dll assembly.
+            </remarks>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IAddIn">
+            <summary>
+            The base interface for an Interaction Client AddIn.
+            </summary>
+            <remarks>
+            Any classes that implement this interface will be loaded by the Interaction Client
+            and the <see cref="M:ININ.InteractionClient.AddIn.IAddIn.Load(System.IServiceProvider)"/> method will be called.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IAddIn.Load(System.IServiceProvider)">
+            <summary>
+            Loads the AddIn, supplying a service provider. The service provider
+            can be used to access application services.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IAddIn.Unload">
+            <summary>
+            Unloads this AddIn instance.
+            </summary>
+            <remarks>
+            Perform any cleanup or dispose of any objects at this time.
+            </remarks>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ICallService">
+            <summary>
+            A service that enables the creating of call interactions.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ICallService.CreateCall(System.String)">
+            <summary>
+            Creates a call interaction to the specified target.
+            </summary>
+            <param name="target">The target of the call. Examples include "555-1234", "(123) 555-1234", and "+41225551234".</param>
+            <returns>The interaction ID of the created interaction, or an empty string if no interaction could be created.</returns>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ICallService.CreateCall(System.String,System.String)">
+            <summary>
+            Creates a call interaction to the specified target, placing the interaction on the specified workgroup.
+            </summary>
+            <param name="target">The target of the call. Examples include "555-1234", "(123) 555-1234", and "+41225551234".</param>
+            <param name="workgroup">The name of the workgroup to dial on behalf of.</param>
+            <returns>The interaction ID of the created interaction, or an empty string if no interaction could be created.</returns>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IDialService">
+            <summary>
+            A service that exposes dial-related operations.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IDialService.Dial(System.String)">
+            <summary>
+            Dials the specified target.
+            </summary>
+            <param name="target">The dial target. Examples include "555-1234", "(123) 555-1234", and "+41225551234".</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IDialService.Dial(System.String,System.String)">
+            <summary>
+            Dials the specified target, on behalf of the specified workgroup.
+            </summary>
+            <param name="target">The dial target. Examples include "555-1234", "(123) 555-1234", and "+41225551234".</param>
+            <param name="workgroup">The name of the workgroup to dial on behalf of.</param>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IInteraction">
+            <summary>
+            An interaction on the Interaction Center server.
+            </summary>
+            <remarks>
+            An <see cref="T:ININ.InteractionClient.AddIn.IInteraction"/> represents an interaction on the Interaction Center server.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IInteraction.SetAttribute(System.String,System.String)">
+            <summary>
+            Sets the specified interaction attribute.
+            </summary>
+            <param name="name">The name of the attribute to set.</param>
+            <param name="value">The value of the attribute.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IInteraction.GetAttribute(System.String)">
+            <summary>
+            Gets the specified interaction attribute.
+            </summary>
+            <param name="name">The name of the interaction attribute to retrieve.</param>
+            <returns>The value of the interaction attribute, or an empty string if the attribute was not found.</returns>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IInteraction.InteractionId">
+            <summary>
+            Gets the ID of the interaction.
+            </summary>
+            <value>The interaction ID.</value>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IInteraction.Item(System.String)">
+            <summary>
+            Gets or sets the specified interaction attribute by name.
+            </summary>
+            <value>
+            Equivalent to calling <see cref="M:ININ.InteractionClient.AddIn.IInteraction.GetAttribute(System.String)"/> or <see cref="M:ININ.InteractionClient.AddIn.IInteraction.SetAttribute(System.String,System.String)"/>.
+            </value>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IInteractionSelector">
+            <summary>
+            A service for retrieving the user's selected interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IInteractionSelector.SelectedInteraction">
+            <summary>
+            Gets the currently selected interaction.
+            </summary>
+            <value>The selected interaction, or <see langword="null"/> if nothing is selected.</value>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.IInteractionSelector.SelectedInteractionChanged">
+            <summary>
+            Occurs when the selected interaction changes.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IInteractionService">
+            <summary>
+            A service that returns interactions from specified interaction IDs.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IInteractionService.GetInteraction(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets an interaction that is notified of changes to the specified attributes.
+            </summary>
+            <param name="interactionId">The interaction ID.</param>
+            <param name="attributes">The attributes on the interaction to watch for changes.</param>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.INotificationService">
+            <summary>
+            A service that notifies the user using supplied information.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.INotificationService.Notify(System.String,System.String,ININ.InteractionClient.AddIn.NotificationType,System.TimeSpan)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <remarks>
+            The notification is typically a desktop alert window, but can change depending on application context.
+            </remarks>
+            <param name="message">The message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="caption">The caption to use in the notification area, if appropriate.</param>
+            <param name="type">The type of the notification. For example, <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Info"/> or <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Warning"/>.</param>
+            <param name="duration">The duration of the notification. Specify <see cref="F:System.TimeSpan.MaxValue"/> to indicate infinite duration.</param>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionEventArgs">
+            <summary>
+            <see cref="T:System.EventArgs"/> that contain an interaction.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.InteractionEventArgs.#ctor(ININ.InteractionClient.AddIn.IInteraction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.InteractionEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionEventArgs.Interaction">
+            <summary>
+            Gets or sets the interaction for this event.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IQueue">
+            <summary>
+            A queue in the Interaction Center server.
+            </summary>
+            <remarks>
+            Retrieve the current list of <see cref="T:ININ.InteractionClient.AddIn.IInteraction"/>s in the queue from the <see cref="P:ININ.InteractionClient.AddIn.IQueue.Interactions"/> property.
+            Subscribe to the <see cref="E:ININ.InteractionClient.AddIn.IQueue.InteractionAdded"/>, <see cref="E:ININ.InteractionClient.AddIn.IQueue.InteractionRemoved"/>, or <see cref="E:ININ.InteractionClient.AddIn.IQueue.InteractionChanged"/>
+            events to be notified when an interaction is added, removed, or changes.
+            Dispose of this instance using the <see cref="T:System.IDisposable"/> interface to release server resources
+            related to monitoring this queue.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IQueue.Name">
+            <summary>
+            Gets the name of the queue being watched.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IQueue.Interactions">
+            <summary>
+            Gets the interactions on the queue.
+            </summary>
+            <value>The interactions on the queue.</value>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.IQueue.InteractionAdded">
+            <summary>
+            Occurs when an interaction is added to the queue.
+            </summary>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.IQueue.InteractionRemoved">
+            <summary>
+            Occurs when an interaction is removed from the queue.
+            </summary>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.IQueue.InteractionChanged">
+            <summary>
+            Occurs when an interaction on the queue has changed.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IQueueService">
+            <summary>
+            An application service that returns a queue for a given queue name.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IQueueService.GetQueue(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the specified queue.
+            </summary>
+            <param name="name">The name of the queue. An empty string will get the "My Interactions" queue, or use the <see cref="P:ININ.InteractionClient.AddIn.IQueueService.MyInteractionsQueueName"/> property to explicitly specify the "My Interactions" queue.</param>
+            <param name="attributes">The interaction attributes to monitor for changes on the queue.</param>
+            <returns>An <see cref="T:ININ.InteractionClient.AddIn.IQueue"/> instance corresponding to the specified queue name.</returns>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IQueueService.GetQueue(System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the specified queue.
+            </summary>
+            <param name="name">The name of the queue. An empty string will get the "My Interactions" queue, or use the <see cref="P:ININ.InteractionClient.AddIn.IQueueService.MyInteractionsQueueName"/> property to explicitly specify the "My Interactions" queue.</param>
+            <param name="attributes">The interaction attributes to monitor for changes on the queue.</param>
+            <param name="supportingAttributes">Additional interaction attributes for which change notifications are not raised, but are still available to query on an interaction.</param>
+            <returns>An <see cref="T:ININ.InteractionClient.AddIn.IQueue"/> instance corresponding to the specified queue name.</returns>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IQueueService.GetMyInteractions(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the "My Interactions" queue for the logged in user.
+            </summary>
+            <param name="attributes">The interaction attributes to monitor for changes on the queue.</param>
+            <returns>An <see cref="T:ININ.InteractionClient.AddIn.IQueue"/> instance corresponding to the "My Interactions" queue.</returns>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IQueueService.GetMyInteractions(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the "My Interactions" queue for the logged in user.
+            </summary>
+            <param name="attributes">The interaction attributes to monitor for changes on the queue.</param>
+            /// <param name="supportingAttributes">Additional interaction attributes for which change notifications are not raised, but are still available to query on an interaction.</param>
+            <returns>An <see cref="T:ININ.InteractionClient.AddIn.IQueue"/> instance corresponding to the "My Interactions" queue.</returns>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IQueueService.MyInteractionsQueueName">
+            <summary>
+            Gets the queue name for the currently logged in user's "My Interactions" queue.
+            </summary>
+            <value>The queue name representing the "My Interactions" queue, or empty string if there is no currently logged in user.</value>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IScreenPop">
+            <summary>
+            Initiates a screen pop. Implement this interface and add an instance of the implementation
+            to the <see cref="T:ININ.InteractionClient.AddIn.IScreenPopService"/> to enable the screen pop.
+            </summary>
+            <remarks>
+            A "screen pop" can be initiated many ways, but is most commonly initiated
+            by an interaction on the Interaction Center server. Information configured by an
+            administrator dictates what information is passed into the <see cref="M:ININ.InteractionClient.AddIn.IScreenPop.Pop(System.Collections.Generic.IDictionary{System.String,System.String})"/>
+            method. In addition, interaction attributes (if available) specified by the
+            <see cref="P:ININ.InteractionClient.AddIn.IScreenPop.AdditionalAttributes"/> property will be included in the input to the <see cref="M:ININ.InteractionClient.AddIn.IScreenPop.Pop(System.Collections.Generic.IDictionary{System.String,System.String})"/> method.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IScreenPop.Pop(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Initiates a screen pop.
+            </summary>
+            <param name="attributes">The specified Interaction and screen pop provider-specific attributes.</param>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IScreenPop.Name">
+            <summary>
+            Gets the name of this screen pop. The name is used to find the screen pop and activate it.
+            </summary>
+            <value>The name of the screen pop.</value>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IScreenPop.AdditionalAttributes">
+            <summary>
+            Gets additional interaction attributes this screen pop needs. If the screen pop is
+            being initiated from an interaction, these attributes will be gathered and
+            passed to the <see cref="M:ININ.InteractionClient.AddIn.IScreenPop.Pop(System.Collections.Generic.IDictionary{System.String,System.String})"/> method in addition to server-defined
+            attributes.
+            </summary>
+            <value>The interaction attributes to retrieve.</value>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IScreenPopService">
+            <summary>
+            A service that manages <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> instances.
+            </summary>
+            <remarks>
+            Add your implementation of <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> to this service,
+            and this service will trigger the <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> appropriately,
+            using the <see cref="P:ININ.InteractionClient.AddIn.IScreenPop.Name"/> property as the identifier.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IScreenPopService.Add(ININ.InteractionClient.AddIn.IScreenPop)">
+            <summary>
+            Adds an <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> to the list of
+            available screen pops.
+            </summary>
+            <param name="screenPop">The <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> to add.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IScreenPopService.Remove(ININ.InteractionClient.AddIn.IScreenPop)">
+            <summary>
+            Removes the <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> from the list of
+            available screen pops.
+            </summary>
+            <param name="screenPop">The <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> to remove.</param>
+            <returns><see langword="true"/> if removed, <see langword="false"/> if not removed or not found.</returns>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IScreenPopService.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/> with the specified name.
+            </summary>
+            <returns>The <see cref="T:ININ.InteractionClient.AddIn.IScreenPop"/>, if found, or <see langword="null"/> if not found.</returns>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ISecureInput">
+            <summary>
+            Provides access to a custom secure input. Implement this interface and add an instance of the implementation
+            to the <see cref="T:ININ.InteractionClient.AddIn.ISecureInputService"/> to make the custom secure input available.
+            </summary>
+            <remarks>
+            A secure input is selected by the user. If the user selects a custom secure input,
+            the Interaction Client will use the matching named form which was added to the <see cref="T:ININ.InteractionClient.AddIn.ISecureInputService"/>.
+            Parameters configured by an administrator dictates what information is passed 
+            into the <see cref="M:ININ.InteractionClient.AddIn.ISecureInput.GetForm(System.Collections.Generic.IDictionary{System.String,System.String})"/> method. In addition, interaction attributes (if available) specified by the
+            <see cref="P:ININ.InteractionClient.AddIn.ISecureInput.AdditionalAttributes"/> property will be included in the parameter dictionary given 
+            to the <see cref="M:ININ.InteractionClient.AddIn.ISecureInput.GetForm(System.Collections.Generic.IDictionary{System.String,System.String})"/> method.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ISecureInput.GetForm(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Gets the secure input form to display.
+            </summary>
+            <param name="parameters">The specified Interaction and secure input parameters.</param>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ISecureInput.Name">
+            <summary>
+            Gets the name of this secure input. The name is used to find the secure input and activate it.
+            </summary>
+            <value>The name of the secure input.</value>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ISecureInput.AdditionalAttributes">
+            <summary>
+            Gets additional interaction attributes this secure input needs. These attributes 
+            will be gathered and included in the parameter passed to the <see cref="M:ININ.InteractionClient.AddIn.ISecureInput.GetForm(System.Collections.Generic.IDictionary{System.String,System.String})"/> method 
+            in addition to server-defined parameters.
+            </summary>
+            <value>The interaction attributes to retrieve.</value>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ISecureInputForm">
+            <summary>
+            A secure input form is a control (Windows Forms or WPF) that is embedded into a containing window
+            and shown to the user in order to collect information before sending a caller into
+            a secure IVR session.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ISecureInputForm.IsValid">
+            <summary>
+            Gets a value indicating the state of the form.
+            </summary>
+            <returns><see langword="true"/> if the data is valid and the user may proceed, 
+            <see langword="false"/> if the user is not allowed to proceed with the secure input form.</returns>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.ISecureInputForm.IsValidChanged">
+            <summary>
+            Occurs when the <see cref="P:ININ.InteractionClient.AddIn.ISecureInputForm.IsValid"/> property is changed.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ISecureInputForm.SecureParameters">
+            <summary>
+            Gets a dictionary with the name/value pairs that will be provided to the secure IVR, 
+            and to the 3rd party service processing the secure input session. 
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ISecureInputForm.Content">
+            <summary>
+            Gets the main content to be displayed in the secure input window displayed to the user.
+            </summary>
+            <returns>
+            Return either a Windows Forms Control or a Windows Presentation Foundation Control.
+            Any other return type will be ignored.
+            </returns>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ISecureInputService">
+            <summary>
+            A service that manages <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> instances.
+            </summary>
+            <remarks>
+            Add your implementation of <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> to this service,
+            and this service will trigger the <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> appropriately,
+            using the <see cref="P:ININ.InteractionClient.AddIn.ISecureInput.Name"/> property as the identifier.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ISecureInputService.Add(ININ.InteractionClient.AddIn.ISecureInput)">
+            <summary>
+            Adds an <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> to the list of
+            available secure inputs.
+            </summary>
+            <param name="secureInput">The <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> to add.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ISecureInputService.Remove(ININ.InteractionClient.AddIn.ISecureInput)">
+            <summary>
+            Removes the <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> from the list of
+            available secure inputs.
+            </summary>
+            <param name="secureInput">The <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> to remove.</param>
+            <returns><see langword="true"/> if removed, <see langword="false"/> if not removed or not found.</returns>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ISecureInputService.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/> with the specified name.
+            </summary>
+            <returns>The <see cref="T:ININ.InteractionClient.AddIn.ISecureInput"/>, if found, or <see langword="null"/> if not found.</returns>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ITraceContext">
+            <summary>
+            A tracing context from which messages can be added to the Interaction Client log file.
+            </summary>
+            <remarks>
+            The trace messages are logged at levels in the following order (from low to high): <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Always(System.String)"/>,
+            <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Error(System.String)"/>, <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Warning(System.String)"/>, <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Status(System.String)"/>, <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Note(System.String)"/>, <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Verbose(System.String)"/>.
+            For example, traces logged with the <see cref="M:ININ.InteractionClient.AddIn.ITraceContext.Warning(System.String)"/> method will be traced if the trace settings are at "Warning" level or higher.
+            However if the trace setting is at "Error", the message will not be logged.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Always(System.String)">
+            <summary>
+            Always traces the specified message, regardless of trace level settings.
+            </summary>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Error(System.String)">
+            <summary>
+            Traces the specified message at the Error trace level.
+            </summary>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Exception(System.Exception,System.String)">
+            <summary>
+            Traces the specified exception and message at the Error trace level.
+            </summary>
+            <param name="exception">The exception to trace. Inner exceptions will also be traced.</param>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Warning(System.String)">
+            <summary>
+            Traces the specified message at the Warning trace level.
+            </summary>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Status(System.String)">
+            <summary>
+            Traces the specified message at the Status trace level.
+            </summary>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Note(System.String)">
+            <summary>
+            Traces the specified message at the Note trace level.
+            </summary>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ITraceContext.Verbose(System.String)">
+            <summary>
+            Traces the specified message at the Verbose trace level.
+            </summary>
+            <param name="message">The trace message.</param>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IWatchedInteraction">
+            <summary>
+            An <see cref="T:ININ.InteractionClient.AddIn.IInteraction"/> that raises the <see cref="E:ININ.InteractionClient.AddIn.IWatchedInteraction.InteractionChanged"/> event 
+            when its attributes change.
+            </summary>
+            <remarks>
+            Dispose of the interaction using the <see cref="T:System.IDisposable"/> interface
+            to release server resources involved in monitoring the interaction for changes.
+            </remarks>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.IWatchedInteraction.InteractionChanged">
+            <summary>
+            Occurs when the interaction changes.
+            </summary>
+            <remarks>
+            This event is raised when a watched interaction attribute changes on the server.
+            For example, the "state" of the interaction. (connected, disconnected, etc.)
+            </remarks>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IWindow">
+            <summary>
+            A window (also referred to as a "Page") in the Interaction Client user interface.
+            Windows are added and removed by users.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IWindow.Title">
+            <summary>
+            Gets the title text to be displayed in the "Header" of the window's
+            tab in the Interaction Client.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.IWindow.Content">
+            <summary>
+            Gets the main window content to be displayed in the Interaction Client's user interface.
+            </summary>
+            <returns>
+            Return either a Windows Forms Control or a Windows Presentation Foundation Control.
+            Any other return type will be ignored.
+            </returns>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.CreateWindowDelegate">
+            <summary>
+            Delegate used to create a new <see cref="T:ININ.InteractionClient.AddIn.IWindow"/>.
+            </summary>
+            <returns>A new instance of an <see cref="T:ININ.InteractionClient.AddIn.IWindow"/>.</returns>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.IWindowManager">
+            <summary>
+            Windows registered with this interface are made available to the user 
+            in the "Pages" dialog, the same place that allows the user to add 
+            directory or queue "tabs" to the Interaction Client's user interface.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IWindowManager.RegisterWindow``1(ININ.InteractionClient.AddIn.WindowRegistrationParameters,ININ.InteractionClient.AddIn.CreateWindowDelegate)">
+            <summary>
+            Register an <see cref="T:ININ.InteractionClient.AddIn.IWindow"/> with the Interaction Client. Once registered,
+            this window will appear in the list of choices the user can select to add to their
+            client user interface.
+            </summary>
+            <typeparam name="TWindow">The <see cref="T:System.Type"/> of the <see cref="T:ININ.InteractionClient.AddIn.IWindow"/> to register.</typeparam>
+            <param name="registrationParameters">
+            The parameters to use when registering the window. 
+            Pass in a new instance of this class to specify category and window identifiers (unique IDs) and display names.
+            </param>
+            <param name="createWindow">
+            A delegate invoked by the Interaction Client when the registered window is being added to the user interface.
+            This delegate should create a new instance of the window and return it. Use this, for example, if your window
+            class (<typeparam name="TWindow"/>) does not have a default empty constructor and requires constructor arguments.
+            </param>
+            <exception cref="T:ININ.InteractionClient.AddIn.DuplicateWindowException">Thrown when a window with the same WindowId and CategoryId has already been registered.</exception>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.IWindowManager.RegisterWindow``1(ININ.InteractionClient.AddIn.WindowRegistrationParameters)">
+            <summary>
+            Register an <see cref="T:ININ.InteractionClient.AddIn.IWindow"/> with the Interaction Client. Once registered,
+            this window will appear in the list of choices the user can select to add to their
+            client user interface.
+            </summary>
+            <typeparam name="TWindow">The <see cref="T:System.Type"/> of the <see cref="T:ININ.InteractionClient.AddIn.IWindow"/> to register. The specified class must have a default (parameterless) constructor.</typeparam>
+            <param name="registrationParameters">
+            The parameters to use when registering the window. 
+            Pass in a new instance of this class to specify category and window identifiers (unique IDs) and display names.
+            </param>
+            <exception cref="T:ININ.InteractionClient.AddIn.DuplicateWindowException">Thrown when a window with the same WindowId and CategoryId has already been registered.</exception>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.NotificationType">
+            <summary>
+            The type, or severity, of a notification. This will, 
+            at a minimum, influence the notification icon.
+            </summary>
+        </member>
+        <member name="F:ININ.InteractionClient.AddIn.NotificationType.None">
+            <summary>
+            No type is specified, the system default will be used.
+            </summary>
+        </member>
+        <member name="F:ININ.InteractionClient.AddIn.NotificationType.Info">
+            <summary>
+            The notification is informational.
+            </summary>
+        </member>
+        <member name="F:ININ.InteractionClient.AddIn.NotificationType.Question">
+            <summary>
+            The notification is a question.
+            </summary>
+        </member>
+        <member name="F:ININ.InteractionClient.AddIn.NotificationType.Warning">
+            <summary>
+            The notification is a warning.
+            </summary>
+        </member>
+        <member name="F:ININ.InteractionClient.AddIn.NotificationType.Error">
+            <summary>
+            The notification is an error.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.WindowRegistrationParameters">
+            <summary>
+            A set of values used to register a window.
+            </summary>
+            <remarks>
+            This class is a configuration object used to group several values together
+            related to the registering of an <see cref="T:ININ.InteractionClient.AddIn.IWindow"/>. Create and pass a new instance of 
+            this class into the <see cref="T:ININ.InteractionClient.AddIn.IWindowManager"/> when registering a window.
+            The <see cref="P:ININ.InteractionClient.AddIn.WindowRegistrationParameters.WindowId"/> and <see cref="P:ININ.InteractionClient.AddIn.WindowRegistrationParameters.CategoryId"/> must be globally unique values to avoid
+            having multiple windows registered with the same identifier.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.WindowRegistrationParameters.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.WindowRegistrationParameters"/> class.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.WindowRegistrationParameters.WindowId">
+            <summary>
+            Gets or sets a unique identifier for this window.
+            </summary>
+            <remarks>
+            This value is not displayed, it should not be translated.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.WindowRegistrationParameters.WindowName">
+            <summary>
+            Gets or sets a displayable name for the window.
+            </summary>
+            <remarks>
+            This will be displayed to the user when they select to add or remove this window.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.WindowRegistrationParameters.CategoryId">
+            <summary>
+            Gets or sets a unique identifier for the category this window is grouped within when
+            displayed to the user in the "Pages" dialog.
+            </summary>
+            <remarks>
+            This value is not displayed, it should not be translated.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.WindowRegistrationParameters.CategoryName">
+            <summary>
+            Gets or sets a displayable name for the category this window is grouped within.
+            </summary>
+            <remarks>
+            This will be displayed to the user when they view the "Pages" dialog in the Interaction Client.
+            </remarks>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.AddInWindow">
+            <summary>
+            A base class for implementing an Interaction Client AddIn-based window.
+            </summary>
+            <remarks>
+            This "helper" base class encapsulates common functionality that
+            allows a custom window implementation to focus on creating the window itself,
+            and not on implementing the code to become an Interaction Client AddIn.
+            Simply derive from this class and implement the abstract and virtual 
+            methods to register a window in the client.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.AddInWindow.Load(System.IServiceProvider)">
+            <summary>
+            Loads this AddIn.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.AddInWindow.OnLoad(System.IServiceProvider)">
+            <summary>
+            Called when the AddIn is being loaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom loading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.AddInWindow.Unload">
+            <summary>
+            Unloads this AddIn.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.AddInWindow.OnUnload">
+            <summary>
+            Called when the AddIn is being unloaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom unloading.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.Id">
+            <summary>
+            Gets the unique identifier of this window.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.DisplayName">
+            <summary>
+            Gets the displayable name for this window.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.CategoryId">
+            <summary>
+            Gets the unique identifier of the category this window should be grouped within.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.CategoryDisplayName">
+            <summary>
+            Gets the display name for the category this window should be grouped within.
+            </summary>
+            <remarks>
+            This value is displayed to the user in the "Pages" dialog.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.Content">
+            <summary>
+            Gets the content of the window in the form of a Windows Forms Control or a Windows Presentation Foundation Control.
+            </summary>
+            <returns>A Windows Forms Control or a Windows Presentation Foundation Control.</returns>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.Title">
+            <summary>
+            Gets the value to show in the "tab" in the Interaction Client's user interface.
+            By default this will return the <see cref="P:ININ.InteractionClient.AddIn.AddInWindow.DisplayName"/>.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.ServiceProvider">
+            <summary>
+            Gets the service provider which can be used to retrieve application services.
+            </summary>
+            <remarks>
+            The <see cref="T:System.IServiceProvider"/> can be used to gain access
+            to other application services that might be needed in this screen pop implementation.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.AddInWindow.Trace">
+            <summary>
+            Gets the trace context. Use this to trace messages to the Interaction Client log.
+            </summary>
+        </member>
+        <member name="E:ININ.InteractionClient.AddIn.AddInWindow.PropertyChanged">
+            <summary>
+            Raised when a property value is changing.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionAttributes">
+            <summary>
+            A helper class that exposes some common interaction attribute names.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.WorkgroupName">
+            <summary>
+            The workgroup name.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.ConferenceId">
+            <summary>
+            The conference ID the interaction belongs to.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.InitiationTime">
+            <summary>
+            The time at which the interaction was initiated.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.TerminationTime">
+            <summary>
+            The time at which the interaction was terminated.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.InteractionId">
+            <summary>
+            The interaction ID.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.LineName">
+            <summary>
+            The name of the line the interaction is currently on.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.Muted">
+            <summary>
+            The muted state of the interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.Private">
+            <summary>
+            The private state of the interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.RemoteAddress">
+            <summary>
+            The remote address of the interaction. This is the value that
+            was dialed, and should be used for dialing.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.RemoteId">
+            <summary>
+            The remote ID of the interaction. This is a display-friendly
+            value that represents the dial string.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.RemoteName">
+            <summary>
+            The remote name of the interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.StationName">
+            <summary>
+            The name of the station the interaction is currently on.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.UserName">
+            <summary>
+            The name of the user the interaction is currently assigned to.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.Notes">
+            <summary>
+            The notes associated with the interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.Log">
+            <summary>
+            The interaction log.
+            </summary> 
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.StateDisplay">
+            <summary>
+            A user displayable version of the current state of the interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.State">
+            <summary>
+            The current state of the interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.Direction">
+            <summary>
+            The direction of the current interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.InteractionType">
+            <summary>
+            The interaction type.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributes.CallType">
+            <summary>
+            The type of call interaction. (Intercom/External)
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionAttributeValues">
+            <summary>
+            Helpers for common interaction attribute values.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionAttributeValues.State">
+            <summary>
+            Values for the State interaction attribute.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Alerting">
+            <summary>The alerting state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Connected">
+            <summary>The connected state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Held">
+            <summary>The held state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Messaging">
+            <summary>The messaging state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Offering">
+            <summary>The offering state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Parked">
+            <summary>The parked state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.Proceeding">
+            <summary>The proceeding state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.System">
+            <summary>The system state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.InternalDisconnect">
+            <summary>The internal disconnect state.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.State.ExternalDisconnect">
+            <summary>The external disconnect state.</summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionAttributeValues.Direction">
+            <summary>
+            Values for the Direction interaction attribute.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.Direction.Incoming">
+            <summary>
+            An incoming interaction direction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.Direction.Outgoing">
+            <summary>
+            An outgoing interaction direction.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType">
+            <summary>
+            Values for the InteractionType interaction attribute.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Call">
+            <summary>A call interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Callback">
+            <summary>A callback interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Chat">
+            <summary>A chat interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Email">
+            <summary>An email interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Generic">
+            <summary>A generic interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Monitor">
+            <summary>A monitor interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.Recorder">
+            <summary>A recorder interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.WebCollaboration">
+            <summary>A web collaboration interaction.</summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.InteractionType.WorkItem">
+            <summary>A work item interaction.</summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.InteractionAttributeValues.CallType">
+            <summary>
+            Values for the CallType interaction attribute.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.CallType.Intercom">
+            <summary>
+            An intercom interaction.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.InteractionAttributeValues.CallType.External">
+            <summary>
+            An external interaction.
+            </summary>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.NotificationServiceUtility">
+            <summary>
+            A helper class that adds common overloads (using defaults) to an <see cref="T:ININ.InteractionClient.AddIn.INotificationService"/>.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.#ctor(ININ.InteractionClient.AddIn.INotificationService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.NotificationServiceUtility"/> class.
+            </summary>
+            <param name="notificationService">The notification service to wrap.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,System.String)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="caption">The caption to use in the notification area, if appropriate.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,System.TimeSpan)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="duration">The duration of the notification. Specify <see cref="F:System.TimeSpan.MaxValue"/> to indicate infinite duration.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,ININ.InteractionClient.AddIn.NotificationType)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="type">The type of the notification. For example, <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Info"/> or <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Warning"/>.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,ININ.InteractionClient.AddIn.NotificationType,System.TimeSpan)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="type">The type of the notification. For example, <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Info"/> or <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Warning"/>.</param>
+            <param name="duration">The duration of the notification. Specify <see cref="F:System.TimeSpan.MaxValue"/> to indicate infinite duration.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,System.String,ININ.InteractionClient.AddIn.NotificationType)">
+            <summary>
+            Notifies the user using the supplied information.
+            </summary>
+            <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="caption">The caption to use in the notification area, if appropriate.</param>
+            <param name="type">The type of the notification. For example, <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Info"/> or <see cref="F:ININ.InteractionClient.AddIn.NotificationType.Warning"/>.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,System.String,System.TimeSpan)">
+            <summary>
+            Notifies the user.
+            </summary>
+            /// <param name="message">The textual message to display. This value should not be very long (less than 255 characters) as the value may not be wrapped.</param>
+            <param name="caption">The caption to use in the notification area, if appropriate.</param>
+            <param name="duration">The duration of the notification. Specify <see cref="F:System.TimeSpan.MaxValue"/> to indicate infinite duration.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.NotificationServiceUtility.Notify(System.String,System.String,ININ.InteractionClient.AddIn.NotificationType,System.TimeSpan)">
+            <inheritdoc/>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.QueueMonitor">
+            <summary>
+            A base class for monitoring an Interaction Center queue.
+            </summary>
+            <remarks>
+            This "helper" base class encapsulates common functionality that
+            allows a queue monitor implementation to focus on actually responding
+            to queue events (added, removed, changed), and not on implementing the code to 
+            become an Interaction Client AddIn. Simply derive from this class and implement
+            the virtual methods to handle queue events.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.QueueMonitor"/> class.
+            </summary>
+            <remarks>
+            Monitors the "My Interactions" queue.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.QueueMonitor"/> class.
+            </summary>
+            <param name="queueName">The name of the queue. (Required)</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.Load(System.IServiceProvider)">
+            <summary>
+            Loads the AddIn, supplying a service provider. The service provider
+            can be used to access application services.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.Unload">
+            <summary>
+            Unloads this AddIn instance.
+            </summary>
+            <remarks>
+            AddIns are unloaded when the application exits. Perform any cleanup or dispose of any objects at this time.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.Finalize">
+            <summary>
+            Releases unmanaged resources and performs other cleanup operations before the
+            <see cref="T:ININ.InteractionClient.AddIn.QueueMonitor"/> is reclaimed by garbage collection.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing"><see langword="true"/> if being called from <see cref="M:ININ.InteractionClient.AddIn.QueueMonitor.Dispose"/>, <see langword="false"/> if being called from the finalizer.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.StartMonitoring">
+            <summary>
+            Starts monitoring the queue.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.StopMonitoring">
+            <summary>
+            Stops monitoring the queue.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.OnLoad(System.IServiceProvider)">
+            <summary>
+            Called when the AddIn is being loaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom loading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.OnUnload">
+            <summary>
+            Called when the AddIn is being unloaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom unloading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.InteractionAdded(ININ.InteractionClient.AddIn.IInteraction)">
+            <summary>
+            Called when an interaction was added.
+            </summary>
+            <param name="interaction">The interaction.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.InteractionChanged(ININ.InteractionClient.AddIn.IInteraction)">
+            <summary>
+            Called when an interaction was changed.
+            </summary>
+            <param name="interaction">The interaction.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.QueueMonitor.InteractionRemoved(ININ.InteractionClient.AddIn.IInteraction)">
+            <summary>
+            Called when an interaction was removed.
+            </summary>
+            <param name="interaction">The interaction.</param>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.QueueMonitor.Attributes">
+            <summary>
+            Gets the attributes to monitor for changes in this queue.
+            </summary>
+            <remarks>
+            The <see cref="M:ININ.InteractionClient.AddIn.QueueMonitor.OnInteractionChanged(System.Object,ININ.InteractionClient.AddIn.InteractionEventArgs)"/> method will be called when the specified attributes change.
+            </remarks>
+            <value>The attributes to monitor for changes.</value>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.QueueMonitor.SupportingAttributes">
+            <summary>
+            Gets additional interaction attributes for which change notifications are not raised, 
+            but are still available to query on an interaction.
+            </summary>
+            <remarks>
+            The <see cref="M:ININ.InteractionClient.AddIn.QueueMonitor.OnInteractionChanged(System.Object,ININ.InteractionClient.AddIn.InteractionEventArgs)"/> method will NOT be called when these specified attributes change.
+            </remarks>
+            <value>The attributes to make available on an interaction.</value>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.QueueMonitor.ServiceProvider">
+            <summary>
+            Gets the service provider which can be used to retrieve application services.
+            </summary>
+            <remarks>
+            The <see cref="T:System.IServiceProvider"/> can be used to gain access
+            to other application services that might be needed in this screen pop implementation.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.QueueMonitor.Trace">
+            <summary>
+            Gets the trace context. Use this to trace messages to the Interaction Client log.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.QueueMonitor.Interactions">
+            <summary>
+            Gets the interactions on the queue.
+            </summary>
+            <remarks>
+            Returns a collection of the <see cref="T:ININ.InteractionClient.AddIn.IInteraction"/>s currently
+            on the monitored queue.
+            </remarks>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ScreenPop">
+            <summary>
+            A base class for implementing a screen pop Interaction Client AddIn.
+            </summary>
+            <remarks>
+            This "helper" base class encapsulates common functionality that
+            allows a screen pop implementation to focus on actually popping
+            an application's screen, and not on implementing the code to 
+            become an Interaction Client AddIn. Simply derive from this class and implement
+            the abstract and virtual methods to handle a screen pop event.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ScreenPop.Load(System.IServiceProvider)">
+            <summary>
+            Loads the AddIn, supplying a service provider. The service provider
+            can be used to access application services.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ScreenPop.OnLoad(System.IServiceProvider)">
+            <summary>
+            Called when the AddIn is being loaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom loading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ScreenPop.Unload">
+            <summary>
+            Unloads this AddIn instance.
+            </summary>
+            <remarks>
+            AddIns are unloaded when the application exits. Perform any cleanup or dispose of any objects at this time.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ScreenPop.OnUnload">
+            <summary>
+            Called when the AddIn is being unloaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom unloading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ScreenPop.Notify(System.String,ININ.InteractionClient.AddIn.NotificationType)">
+            <summary>
+            Notifies the user using the default caption and duration.
+            </summary>
+            <remarks>
+            If more control is required over the notification, use the <see cref="P:ININ.InteractionClient.AddIn.ScreenPop.NotificationService"/> property.
+            </remarks>
+            <param name="message">The textual message to display.</param>
+            <param name="type">The type of the notification.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ScreenPop.Pop(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ScreenPop.ServiceProvider">
+            <summary>
+            Gets the service provider which can be used to retrieve application services.
+            </summary>
+            <remarks>
+            The <see cref="T:System.IServiceProvider"/> can be used to gain access
+            to other application services that might be needed in this screen pop implementation.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ScreenPop.Trace">
+            <summary>
+            Gets the trace context. Use this to trace messages to the Interaction Client log.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ScreenPop.NotificationService">
+            <summary>
+            Gets the notification service.
+            </summary>
+            <remarks>
+            It is preferred to use the <see cref="M:ININ.InteractionClient.AddIn.ScreenPop.Notify(System.String,ININ.InteractionClient.AddIn.NotificationType)"/> method to display
+            notifications, however for more advanced usage, the <see cref="P:ININ.InteractionClient.AddIn.ScreenPop.NotificationService"/>
+            property will return a reference to the actual notification service.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ScreenPop.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ScreenPop.AdditionalAttributes">
+            <inheritdoc/>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.SecureInput">
+            <summary>
+            A base class for implementing a custom secure input Interaction Client AddIn.
+            </summary>
+            <remarks>
+            This "helper" base class encapsulates common functionality that
+            allows a secure input form implementation to focus on 
+            the logic behind showing a form, and not on implementing the code to 
+            become an Interaction Client AddIn. Simply derive from this class and implement
+            the abstract and virtual methods to display a custom secure input form.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.SecureInput.Load(System.IServiceProvider)">
+            <summary>
+            Loads the AddIn, supplying a service provider. The service provider
+            can be used to access application services.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.SecureInput.OnLoad(System.IServiceProvider)">
+            <summary>
+            Called when the AddIn is being loaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom loading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.SecureInput.Unload">
+            <summary>
+            Unloads this AddIn instance.
+            </summary>
+            <remarks>
+            AddIns are unloaded when the application exits. Perform any cleanup or dispose of any objects at this time.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.SecureInput.OnUnload">
+            <summary>
+            Called when the AddIn is being unloaded.
+            </summary>
+            <remarks>
+            Override this method to perform any custom unloading.
+            </remarks>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.SecureInput.Notify(System.String,ININ.InteractionClient.AddIn.NotificationType)">
+            <summary>
+            Notifies the user using the default caption and duration.
+            </summary>
+            <remarks>
+            If more control is required over the notification, use the <see cref="P:ININ.InteractionClient.AddIn.SecureInput.NotificationService"/> property.
+            </remarks>
+            <param name="message">The textual message to display.</param>
+            <param name="type">The type of the notification.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.SecureInput.GetForm(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.SecureInput.ServiceProvider">
+            <summary>
+            Gets the service provider which can be used to retrieve application services.
+            </summary>
+            <remarks>
+            The <see cref="T:System.IServiceProvider"/> can be used to gain access
+            to other application services that might be needed in this secure input implementation.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.SecureInput.Trace">
+            <summary>
+            Gets the trace context. Use this to trace messages to the Interaction Client log.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.SecureInput.NotificationService">
+            <summary>
+            Gets the notification service.
+            </summary>
+            <remarks>
+            It is preferred to use the <see cref="M:ININ.InteractionClient.AddIn.SecureInput.Notify(System.String,ININ.InteractionClient.AddIn.NotificationType)"/> method to display
+            notifications, however for more advanced usage, the <see cref="P:ININ.InteractionClient.AddIn.SecureInput.NotificationService"/>
+            property will return a reference to the actual notification service.
+            </remarks>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.SecureInput.AdditionalAttributes">
+            <inheritdoc/>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.SecureInput.Name">
+            <inheritdoc/>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.AddInVersion">
+            <summary>
+            Information about the current AddIn API version.
+            The AddIn API version is used to determine whether or not 
+            breaking changes have occurred in the API since the version
+            an AddIn was compiled against.
+            </summary>
+        </member>
+        <member name="F:ININ.InteractionClient.AddIn.AddInVersion.CurrentVersion">
+            <summary>
+            The value representing the current version of the AddIn API.
+            </summary>
+            <remarks>
+            <para>
+            Use this string when creating your AddIn and using the <see cref="T:ININ.InteractionClient.AddIn.AddInVersionAttribute"/>
+            on your AddIn assembly. This will ensure that your AddIn captures the API version it was
+            written against, and will prevent it from loading if the API version changes due to a breaking change.
+            </para>
+            <para>
+            A public const field is compiled into the assembly that references it, so it is captured
+            as a snapshot of the moment of compilation. Thus if the AddIn API version changes, AddIn assemblies
+            will need to be rebuilt to pick up the new version number, and any breaking API changes will be discovered at
+            compile time.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.DuplicateWindowException">
+            <summary>
+            An exception thrown when a <see cref="T:ININ.InteractionClient.AddIn.IWindow"/> with the same 
+            category and identifier has already been registered.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.DuplicateWindowException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.DuplicateWindowException"/> class.
+            </summary>
+            <param name="category">The identifier of the category that was to be added.</param>
+            <param name="windowId">The identifier of the window that was to be added.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.DuplicateWindowException.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.DuplicateWindowException"/> class.
+            </summary>
+            <param name="category">The identifier of the category that was to be added.</param>
+            <param name="windowId">The identifier of the window that was to be added.</param>
+            <param name="message">A message describing the error that occurred.</param>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.DuplicateWindowException.Category">
+            <summary>
+            Gets the identifier of the category that was attempted to be added.
+            </summary>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.DuplicateWindowException.WindowId">
+            <summary>
+            Gets the identifier of the window that was attempted to be added.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.Guard.ArgumentNotNull(System.Object,System.String)">
+            <exclude/>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.Guard.ArgumentNotNullOrEmptyString(System.String,System.String)">
+            <exclude/>
+        </member>
+        <member name="T:ININ.InteractionClient.AddIn.ServiceNotFoundException">
+            <summary>
+            An exception thrown when a required service type is not found.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ServiceNotFoundException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.ServiceNotFoundException"/> class.
+            </summary>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ServiceNotFoundException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.ServiceNotFoundException"/> class.
+            </summary>
+            <param name="serviceName">The name of the service type that was not found.</param>
+        </member>
+        <member name="M:ININ.InteractionClient.AddIn.ServiceNotFoundException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ININ.InteractionClient.AddIn.ServiceNotFoundException"/> class.
+            </summary>
+            <param name="serviceName">The name of the service type that was not found.</param>
+            <param name="message">A descriptive message describing context about the exception.</param>
+        </member>
+        <member name="P:ININ.InteractionClient.AddIn.ServiceNotFoundException.ServiceName">
+            <summary>
+            Gets the name of the service type that was not found.
+            </summary>
+        </member>
+    </members>
+</doc>
